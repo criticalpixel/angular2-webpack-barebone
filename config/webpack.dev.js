@@ -149,14 +149,10 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/webpack-dev-server.html
      */
     devServer: {
-      port: METADATA.port,
-      host: METADATA.host,
       historyApiFallback: true,
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000
-      },
-      outputPath: helpers.root('dist')
+      quiet:true,
+      outputPath: helpers.root('dist'),
+       stats: 'minimal'
     },
 
     /*
