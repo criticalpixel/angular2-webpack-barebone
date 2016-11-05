@@ -8,6 +8,8 @@ const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
+//When in Prod mode .. ( separate this later...)
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 module.exports = {
   entry: {
     main: "./src/main.browser.ts",
@@ -72,6 +74,34 @@ module.exports = {
     }),
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer'
-    })
+    }),
+    new UglifyJsPlugin({
+      // beautify: true, //debug
+      // mangle: false, //debug
+      // dead_code: false, //debug
+      // unused: false, //debug
+      // deadCode: false, //debug
+      // compress: {
+      //   screw_ie8: true,
+      //   keep_fnames: true,
+      //   drop_debugger: false,
+      //   dead_code: false,
+      //   unused: false
+      // }, // debug
+      // comments: true, //debug
+
+
+      beautify: false, //prod
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: true
+      }, //prod
+      compress: {
+        screw_ie8: true,
+        warnings:false,
+        keep_fnames: false,
+      }, //prod
+      comments: false, //prod
+    }),
   ],
 };
