@@ -12,8 +12,10 @@
   "homepage": "https://github.com/criticalpixel/angular2-webpack-barebone",
   "license": "MIT",
   "scripts": {
+    "ngc": "ngc -p ./tsconfig.aot.json",
     "build:dev": "webpack --config config/webpack.dev.js --progress --profile",
     "server:dev": "webpack-dev-server --config webpack.config.js --watch --content-base src/",
+    "server:dev-aot": "npm run ngc && webpack-dev-server --config webpack.config.aot.js --watch --content-base src/",
     "build": "npm run build:dev",
     "server": "npm run server:dev",
     "testrun": "webpack --config webpack.config.js --progress --profile"
@@ -21,6 +23,7 @@
   "dependencies": {
     "@angular/common": "~2.1.1",
     "@angular/compiler": "~2.1.1",
+    "@angular/compiler-cli": "^2.1.2",
     "@angular/core": "~2.1.1",
     "@angular/forms": "~2.1.1",
     "@angular/http": "~2.1.1",
@@ -36,6 +39,7 @@
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
+    "@ngtools/webpack": "^1.1.4",
     "@types/core-js": "^0.9.34",
     "@types/node": "^6.0.45",
     "@types/source-map": "^0.1.27",
