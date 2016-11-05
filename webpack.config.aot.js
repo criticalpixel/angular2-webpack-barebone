@@ -1,18 +1,21 @@
 'use strict';
+
 const webpack = require("webpack");
 const helpers = require('./config/helpers');
 //plugins
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-let ngtools = require('@ngtools/webpack'); // aot via webpack
 
 //When in Prod mode .. ( separate this later...)
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 module.exports = {
   entry: {
-    main: "./src/main.browser.ts"
+    main: "./src/main.aot.browser.ts",
+    vendors: "./src/vendor.browser.ts",
+    polyfills: "./src/polyfills.browser.ts",
   },
   output: {
     path: helpers.root('dist'),
@@ -27,12 +30,11 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        loader : '@ngtools/webpack',
-        // loaders: [
-        //   'awesome-typescript-loader',
-        //   'angular2-template-loader',
-        //   'angular2-router-loader'
-        // ],
+        loaders: [
+          'awesome-typescript-loader',
+          'angular2-template-loader',
+          'angular2-router-loader?loader=system&genDir=src/compiled/src/app&aot=true'
+        ],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
@@ -55,16 +57,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new ngtools.AotPlugin({
-      tsConfigPath: './tsconfig.aot.json',
-      baseDir: helpers.root('src'),
-      entryModule: './src/app/app.module#AppModule'
+  	new webpack.optimize.CommonsChunkPlugin({
+      name: "commons",
+      filename: "commons.js",
+      minChunks: 2,
     }),
-  	// new webpack.optimize.CommonsChunkPlugin({
-   //    name: "commons",
-   //    filename: "commons.js",
-   //    minChunks: 2,
-   //  }),
     new ForkCheckerPlugin(),
     new ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
@@ -76,6 +73,7 @@ module.exports = {
     	chunksSortMode: 'dependency',
     	inject:'head'
     }),
+    new NamedModulesPlugin(),
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer'
     }),
@@ -108,4 +106,22 @@ module.exports = {
       comments: false, //prod
     }),
   ],
+  devServer: {
+    contentBase: './src/compiled',
+    port: 4200,
+    historyApiFallback: {
+      disableDotRule: true,
+    }
+  },
+  node: {
+    global: true,
+    process: true,
+    Buffer: false,
+    crypto: true,
+    module: false,
+    clearImmediate: false,
+    setImmediate: false,
+    clearTimeout: true,
+    setTimeout: true
+  }
 };

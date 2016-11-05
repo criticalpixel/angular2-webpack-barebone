@@ -6,9 +6,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "pretty": false,
     "sourceMap": true,
     "noEmitHelpers": true,
     "strictNullChecks": false,
+    "outDir": "output",
     "rootDir": "./src",
     "lib": [
       "dom",
@@ -23,16 +25,22 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/compiled",
+    "src/main.aot.browser.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
-    "useWebpackText": true
+    "useWebpackText": true,
+    "forkChecker": true,
+    "useCache": true
   },
   "angularCompilerOptions": {
-   "genDir": "./aot",
+   "genDir": "src/compiled",
    "skipMetadataEmit" : true
   },
   "compileOnSave": false,
   "buildOnSave": false,
   "atom": { "rewriteTsconfig": false }
 }
+
+

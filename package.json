@@ -12,13 +12,25 @@
   "homepage": "https://github.com/criticalpixel/angular2-webpack-barebone",
   "license": "MIT",
   "scripts": {
-    "ngc": "ngc -p ./tsconfig.aot.json",
+    "rimraf": "rimraf",
+    "webdev": "webpack-dev-server",
+    "webpack": "webpack",
+    "ngc": "ngc -p tsconfig.aot.json && npm run rimraf -- output",
+    "compile": "npm run compile:aot",
+    "compile:aot": "npm run clean:compile && npm run ngc && npm run build:aot",
     "build:dev": "webpack --config config/webpack.dev.js --progress --profile",
     "server:dev": "webpack-dev-server --config webpack.config.js --watch --content-base src/",
-    "server:dev-aot": "npm run ngc && webpack-dev-server --config webpack.config.aot.js --watch --content-base src/",
+    "server:dev-aot": "npm run ngc && webpack-dev-server --config webpack.config.aot.js --watch",
     "build": "npm run build:dev",
     "server": "npm run server:dev",
-    "testrun": "webpack --config webpack.config.js --progress --profile"
+    "testrun": "webpack --config webpack.config.js --progress --profile",
+    "clean": "npm cache clean && npm run rimraf -- node_modules doc typings coverage dist .awcache dll && npm run clean:compile",
+    "clean:dist": "npm run rimraf -- dist .awcache",
+    "clean:dll": "npm run rimraf -- dll",
+    "clean:compile": "npm run rimraf -- \"src/compiled\" ",
+    "build": "npm run build:prod",
+    "build:aot": "npm run build:aot:prod",
+    "build:aot:prod": "npm run clean:dist && webpack --config webpack.config.aot.js"
   },
   "dependencies": {
     "@angular/common": "~2.1.1",
