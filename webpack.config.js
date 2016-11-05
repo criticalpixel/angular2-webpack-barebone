@@ -15,8 +15,9 @@ module.exports = {
     polyfills: "./src/polyfills.browser.ts",
   },
   output: {
-    path: __dirname + "/dist",
+    path: helpers.root('dist'),
     filename: "[name].bundle.js",
+    chunkFilename: '[id].chunk.js'
   },
   resolve: {
   	extensions: ['.js', '.ts'],
@@ -28,7 +29,8 @@ module.exports = {
         test: /\.ts$/,
         loaders: [
           'awesome-typescript-loader',
-          'angular2-template-loader'
+          'angular2-template-loader',
+          'angular2-router-loader'
         ],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
