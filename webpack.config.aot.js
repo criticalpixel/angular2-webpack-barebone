@@ -15,7 +15,7 @@ module.exports = {
   entry: {
     main: "./src/main.aot.browser.ts",
     vendors: "./src/vendor.browser.ts",
-    polyfills: "./src/polyfills.browser.ts",
+    polyfills: "./src/polyfills.aot.browser.ts",
   },
   output: {
     path: helpers.root('dist'),
@@ -78,33 +78,10 @@ module.exports = {
       defaultAttribute: 'defer'
     }),
     new UglifyJsPlugin({
-      // beautify: true, //debug
-      // mangle: false, //debug
-      // dead_code: false, //debug
-      // unused: false, //debug
-      // deadCode: false, //debug
-      // compress: {
-      //   screw_ie8: true,
-      //   keep_fnames: true,
-      //   drop_debugger: false,
-      //   dead_code: false,
-      //   unused: false
-      // }, // debug
-      // comments: true, //debug
-
-
-      beautify: false, //prod
-      mangle: {
-        screw_ie8: true,
-        keep_fnames: true
-      }, //prod
-      compress: {
-        screw_ie8: true,
-        warnings:false,
-        keep_fnames: false,
-      }, //prod
-      comments: false, //prod
-    }),
+        beautify: false,
+        comments: false,
+        compress: { warnings: false,drop_console: true },
+      }),
   ],
   devServer: {
     contentBase: './src/compiled',
